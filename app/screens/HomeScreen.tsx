@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   title: {
     marginBottom: 40,
     fontWeight: 'bold',
+    color: '#333',
   },
   buttons: {
     flexDirection: 'row',
