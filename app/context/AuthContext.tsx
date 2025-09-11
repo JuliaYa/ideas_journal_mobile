@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { createContext, useEffect, useState } from "react";
 import { login as apiLogin, logout as apiLogout } from "../services/auth";
 
 interface AuthContextProps {
@@ -16,14 +16,17 @@ export const AuthContext = createContext<AuthContextProps>({
   loading: true,
 });
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export default ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       const token = await AsyncStorage.getItem("access");
-      if (token) setUser(true);
+      if (token) {
+        console.log(token)
+        setUser(true);  // set real user
+      }
       setLoading(false);
     })();
   }, []);
