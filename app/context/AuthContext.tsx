@@ -24,7 +24,6 @@ export default ({ children }: { children: React.ReactNode }) => {
     (async () => {
       const token = await AsyncStorage.getItem("access");
       if (token) {
-        console.log(token)
         setUser(true);  // set real user
       }
       setLoading(false);
