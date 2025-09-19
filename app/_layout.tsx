@@ -9,15 +9,10 @@ import HomeScreen from './screens/HomeScreen';
 import IdeasListScreen from './screens/IdeasListScreen';
 import LoadingScreen from './screens/LoadingScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import IdeaDetailsScreen from './screens/IdeaDetailsScreen';
+import {RootStackParamList} from './services/rootStack';
 
-export type RootStackParamList = {
-  Home: undefined;
-  IdeasList: undefined;
-  AddIdea: undefined;
-  Settings: undefined;
-  Login: undefined;
-  Loading: undefined;
-};
+
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -31,6 +26,7 @@ function AppNavigator() {
         <>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="IdeasList" component={IdeasListScreen} />
+          <Stack.Screen name="IdeaDetails" component={IdeaDetailsScreen} />
           <Stack.Screen name="AddIdea" component={AddIdeaScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
         </>

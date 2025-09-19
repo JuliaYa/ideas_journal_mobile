@@ -3,6 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, List, Snackbar, Text } from 'react-native-paper';
 import { getList } from '../services/ideas';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../services/rootStack';
+
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+
+type Props = {
+  navigation: HomeScreenNavigationProp;
+};
 
 type Idea = {
   id: string;
@@ -10,7 +18,7 @@ type Idea = {
   description?: string | null;
 };
 
-export default function IdeasListScreen() {
+export default function IdeasListScreen({ navigation }: Props) {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -45,6 +53,7 @@ export default function IdeasListScreen() {
     <List.Item
       title={item.title}
       description={item.description ?? ''}
+      onPress={() => navigation.navigate('IdeaDetails')}
       left={props => <List.Icon {...props} icon="spider-web" />}
     />
   );
