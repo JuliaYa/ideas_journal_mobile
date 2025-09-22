@@ -1,17 +1,21 @@
 // screens/IdeaDetailsScreen.tsx
-import React, { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { ActivityIndicator, Text, Snackbar} from 'react-native-paper';
-import { getIdea } from '../services/ideas';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../services/rootStack';
 import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Image, View } from 'react-native';
+import { ActivityIndicator, Snackbar, Text } from 'react-native-paper';
+import { getIdea } from '../services/ideas';
+import { RootStackParamList } from '../services/rootStack';
 
 // todo: move common tipes to one place
 type Idea = {
   id: string;
   title: string;
   description?: string | null;
+  main_picture?: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
 };
 
 type Props = {
@@ -55,7 +59,11 @@ export default function IdeaDetailsScreen({route}: Props) {
     <>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text variant="headlineMedium">{idea?.title}</Text>
+        <Text variant='bodyLarge'>Status: {idea?.status}</Text>
+        <Image source={{uri: idea?.main_picture || undefined }} />
         <Text variant="bodyMedium">{idea?.description}</Text>
+        <Text variant="bodySmall">Created at: {new Date(idea?.created_at || '').toLocaleDateString()}</Text>
+        <Text variant="bodySmall">Updated at: {new Date(idea?.updated_at || '').toLocaleDateString()}</Text>
       </View>
       <Snackbar visible={!!error} onDismiss={() => setError(null)} action={{ label: 'Retry', onPress: () => loadList() }}>
         {error}
