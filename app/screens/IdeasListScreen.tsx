@@ -6,7 +6,7 @@ import { getList } from '../services/ideas';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../services/rootStack';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'IdeasList'>;
 
 type Props = {
   navigation: HomeScreenNavigationProp;
@@ -53,7 +53,7 @@ export default function IdeasListScreen({ navigation }: Props) {
     <List.Item
       title={item.title}
       description={item.description ?? ''}
-      onPress={() => navigation.navigate('IdeaDetails')}
+      onPress={() => navigation.navigate('IdeaDetails', {id: item.id })}
       left={props => <List.Icon {...props} icon="spider-web" />}
     />
   );
