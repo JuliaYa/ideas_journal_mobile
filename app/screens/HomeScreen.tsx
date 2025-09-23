@@ -1,17 +1,11 @@
 // screens/HomeScreen.tsx
 import React from 'react';
+import { router } from 'expo-router';
 import { View, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../services/rootStack';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
-type Props = {
-  navigation: HomeScreenNavigationProp;
-};
-
-export default function HomeScreen({ navigation }: Props) {
+export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text variant="headlineMedium" style={styles.title}>
@@ -22,14 +16,14 @@ export default function HomeScreen({ navigation }: Props) {
         <Button
           mode="contained"
           icon="format-list-text"
-          onPress={() => navigation.navigate('IdeasList')}
+          onPress={() => router.push('/screens/IdeasListScreen')}
         >
           View the List
         </Button>
         <Button
           mode="contained"
           icon="grease-pencil"
-          onPress={() => navigation.navigate('AddIdea')}
+          onPress={() => router.push('/screens/AddIdeaScreen')}
         >
           Add New Idea
         </Button>
@@ -37,7 +31,7 @@ export default function HomeScreen({ navigation }: Props) {
 
       <Button
         mode="text"
-        onPress={() => navigation.navigate('Settings')}
+        onPress={() => router.push('/screens/SettingsScreen')}
         style={styles.settingsButton}
       >
         Go to Settings

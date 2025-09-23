@@ -1,16 +1,10 @@
 // screens/IdeasListScreen.tsx
 import React, { useCallback, useEffect, useState } from 'react';
+import { router } from 'expo-router';
 import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, List, Snackbar, Text } from 'react-native-paper';
 import { getList } from '../services/ideas';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../services/rootStack';
 
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'IdeasList'>;
-
-type Props = {
-  navigation: HomeScreenNavigationProp;
-};
 
 type Idea = {
   id: string;
@@ -18,7 +12,7 @@ type Idea = {
   description?: string | null;
 };
 
-export default function IdeasListScreen({ navigation }: Props) {
+export default function IdeasListScreen() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -53,7 +47,7 @@ export default function IdeasListScreen({ navigation }: Props) {
     <List.Item
       title={item.title}
       description={item.description ?? ''}
-      onPress={() => navigation.navigate('IdeaDetails', {id: item.id })}
+      onPress={() => router.push({ pathname: '/screens/IdeaDetailsScreen', params: { id: item.id } })}
       left={props => <List.Icon {...props} icon="spider-web" />}
     />
   );

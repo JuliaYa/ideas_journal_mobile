@@ -1,11 +1,9 @@
 // screens/IdeaDetailsScreen.tsx
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 import { Image, View } from 'react-native';
 import { ActivityIndicator, Snackbar, Text } from 'react-native-paper';
 import { getIdea } from '../services/ideas';
-import { RootStackParamList } from '../services/rootStack';
 
 // todo: move common tipes to one place
 type Idea = {
@@ -18,22 +16,18 @@ type Idea = {
   updated_at: string;
 };
 
-type Props = {
-  route: RouteProp<RootStackParamList, 'IdeaDetails'>;
-  navigation: StackNavigationProp<RootStackParamList, 'IdeaDetails'>;
-};
-
-export default function IdeaDetailsScreen({route}: Props) {
+export default function IdeaDetailsScreen() {
   const [idea, setIdea] = useState<Idea>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { id } = route.params;
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   const loadList = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
+      if (!id) throw new Error('Missing idea id');
       const res = await getIdea(id);
       const data = (await res) as Idea;
 
@@ -48,7 +42,7 @@ export default function IdeaDetailsScreen({route}: Props) {
 
   useEffect(() => {
     loadList();
-  }, [loadList]);
+  }, [loadList, id]);
 
 
   if (loading) {
