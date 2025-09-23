@@ -1,9 +1,9 @@
 // screens/IdeasListScreen.tsx
+import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { router } from 'expo-router';
 import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, List, Snackbar, Text } from 'react-native-paper';
-import { getList } from '../services/ideas';
+import { getList } from './services/ideas';
 
 
 type Idea = {
@@ -13,6 +13,7 @@ type Idea = {
 };
 
 export default function IdeasListScreen() {
+  const router = useRouter();
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -47,7 +48,7 @@ export default function IdeasListScreen() {
     <List.Item
       title={item.title}
       description={item.description ?? ''}
-      onPress={() => router.push({ pathname: '/screens/IdeaDetailsScreen', params: { id: item.id } })}
+      onPress={() => router.push({ pathname: '/IdeaDetails', params: { id: item.id } })}
       left={props => <List.Icon {...props} icon="spider-web" />}
     />
   );

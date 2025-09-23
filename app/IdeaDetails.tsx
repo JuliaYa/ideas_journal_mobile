@@ -1,9 +1,9 @@
 // screens/IdeaDetailsScreen.tsx
-import React, { useCallback, useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Image, View } from 'react-native';
 import { ActivityIndicator, Snackbar, Text } from 'react-native-paper';
-import { getIdea } from '../services/ideas';
+import { getIdea } from './services/ideas';
 
 // todo: move common tipes to one place
 type Idea = {

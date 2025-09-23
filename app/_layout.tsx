@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { Stack } from 'expo-router';
+import * as React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import AuthProvider from './context/AuthContext';
 import useAuth from "./hooks/useAuth";
@@ -13,7 +13,7 @@ function AppNavigator() {
       {loading ? <Stack.Screen name="Loading" options={{ headerShown: false }} /> : null}
       {user ? (
         <>
-          <Stack.Screen name="Home"/>
+          <Stack.Screen name="Index"/>
           <Stack.Screen name="IdeasList" />
           <Stack.Screen name="IdeaDetails" />
           <Stack.Screen name="AddIdea" />

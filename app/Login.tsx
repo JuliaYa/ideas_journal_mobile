@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Alert, Button, TextInput, View } from "react-native";
-import useAuth from "../hooks/useAuth";
+import useAuth from "./hooks/useAuth";
 
 export default function LoginScreen() {
   const { login } = useAuth();

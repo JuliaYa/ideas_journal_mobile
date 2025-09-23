@@ -1,11 +1,12 @@
 // screens/HomeScreen.tsx
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { router } from 'expo-router';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
 
-export default function HomeScreen() {
+export default function IndexScreen() {
+  const router = useRouter();
   return (
     <View style={styles.container}>
       <Text variant="headlineMedium" style={styles.title}>
@@ -16,14 +17,14 @@ export default function HomeScreen() {
         <Button
           mode="contained"
           icon="format-list-text"
-          onPress={() => router.push('/screens/IdeasListScreen')}
+          onPress={() => router.push('/IdeasList')}
         >
           View the List
         </Button>
         <Button
           mode="contained"
           icon="grease-pencil"
-          onPress={() => router.push('/screens/AddIdeaScreen')}
+          onPress={() => router.push('/AddIdea')}
         >
           Add New Idea
         </Button>
@@ -31,7 +32,7 @@ export default function HomeScreen() {
 
       <Button
         mode="text"
-        onPress={() => router.push('/screens/SettingsScreen')}
+        onPress={() => router.push('/Settings')}
         style={styles.settingsButton}
       >
         Go to Settings
