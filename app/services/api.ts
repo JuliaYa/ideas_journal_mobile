@@ -1,7 +1,8 @@
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
-const API_URL = "http://127.0.0.1:8000/api/"; // todo: remove it later from here
+// const API_URL = "http://127.0.0.1:8000/api/"; // todo: remove it later from here
+const API_URL = "http://ddezx-178-66-5-61.a.free.pinggy.link/api/"
 
 const api = axios.create({ baseURL: API_URL });
 
@@ -20,7 +21,7 @@ api.interceptors.response.use(
       const refresh = await AsyncStorage.getItem("refresh");
       if (refresh) {
         try {
-          const res = await axios.post(`${API_URL}/token/refresh/`, { refresh });
+          const res = await axios.post(`${API_URL}token/refresh/`, { refresh });
           await AsyncStorage.setItem("access", res.data.access);
           error.config.headers.Authorization = `Bearer ${res.data.access}`;
           return api.request(error.config);
