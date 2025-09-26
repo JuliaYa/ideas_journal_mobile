@@ -2,15 +2,9 @@
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, List, Snackbar, Text } from 'react-native-paper';
-import { getList } from './services/ideas';
+import { ActivityIndicator, Button, List, Snackbar, Text } from 'react-native-paper';
+import { getList, Idea } from './services/ideas';
 
-
-type Idea = {
-  id: string;
-  title: string;
-  description?: string | null;
-};
 
 export default function IdeasListScreen() {
   const router = useRouter();
@@ -59,6 +53,9 @@ export default function IdeasListScreen() {
 
   return (
     <>
+      <Button style={styles.addIdea} mode="contained" onPress={() => router.push('/AddIdea')}>
+        Add Idea
+      </Button>
       {ideas.length === 0 ? (
         <View style={styles.center}>
           <Text>No ideas yet.</Text>
@@ -82,4 +79,5 @@ export default function IdeasListScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  addIdea: { margin: 30, marginTop: 10}
 });

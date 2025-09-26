@@ -3,18 +3,8 @@ import { useLocalSearchParams } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Image, View } from 'react-native';
 import { ActivityIndicator, Snackbar, Text } from 'react-native-paper';
-import { getIdea } from './services/ideas';
+import { getIdea, Idea } from './services/ideas';
 
-// todo: move common tipes to one place
-type Idea = {
-  id: string;
-  title: string;
-  description?: string | null;
-  main_picture?: string | null;
-  status: string;
-  created_at: string;
-  updated_at: string;
-};
 
 export default function IdeaDetailsScreen() {
   const [idea, setIdea] = useState<Idea>();
