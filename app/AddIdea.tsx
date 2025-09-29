@@ -19,7 +19,7 @@ export default function AddIdeaScreen() {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, margin: 20 }}>
       <Text variant="headlineMedium">Add New Idea</Text>
       <TextInput
               mode="outlined"

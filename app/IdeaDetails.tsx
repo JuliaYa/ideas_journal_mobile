@@ -41,13 +41,13 @@ export default function IdeaDetailsScreen() {
 
   return (
     <>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, margin: 20 }}>
         <Text variant="headlineMedium">{idea?.title}</Text>
-        <Text variant='bodyLarge'>Status: {idea?.status}</Text>
+        <Text variant='labelLarge' style={{ color: 'green', marginBottom: 10 }}>{idea?.status}</Text>
         <Image source={{uri: idea?.main_picture || undefined }} />
-        <Text variant="bodyMedium">{idea?.description}</Text>
-        <Text variant="bodySmall">Created at: {new Date(idea?.created_at || '').toLocaleDateString()}</Text>
-        <Text variant="bodySmall">Updated at: {new Date(idea?.updated_at || '').toLocaleDateString()}</Text>
+        <Text variant="bodyLarge" style={{marginBottom: 20}}>{idea?.description}</Text>
+        <Text variant="bodySmall">Created: {new Date(idea?.created_at || '').toLocaleDateString()}</Text>
+        <Text variant="bodySmall">Updated: {new Date(idea?.updated_at || '').toLocaleDateString()}</Text>
       </View>
       <Snackbar visible={!!error} onDismiss={() => setError(null)} action={{ label: 'Retry', onPress: () => loadList() }}>
         {error}

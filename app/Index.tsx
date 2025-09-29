@@ -19,14 +19,14 @@ export default function IndexScreen() {
           icon="format-list-text"
           onPress={() => router.push('/IdeasList')}
         >
-          View the List
+          Dive into Ideas
         </Button>
         <Button
           mode="contained"
           icon="grease-pencil"
           onPress={() => router.push('/AddIdea')}
         >
-          Add New Idea
+          I have Idea
         </Button>
       </View>
 
