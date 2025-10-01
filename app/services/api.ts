@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-  const API_URL = "http://127.0.0.1:8000/api/"; // for working on a web part
-//const API_URL = "https://ipxdx-178-66-5-61.a.free.pinggy.link/api/"  // for mobile testing
+const API_URL = "http://127.0.0.1:8000/api/"; // for working on a web part
+// const API_URL = "https://rnwct-95-216-27-23.a.free.pinggy.link/api/"  // for mobile testing
 
 const api = axios.create({ baseURL: API_URL });
 
