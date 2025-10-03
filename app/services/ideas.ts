@@ -28,6 +28,16 @@ export async function getIdea(id: string) {
 };
 
 export async function createIdea(idea: Idea) {
-    const res = await api.post("/ideas/create/", idea, config);
+    const res = await api.post("/ideas/", idea, config);
+    return res.data;
+};
+
+export async function editIdea(id: string, idea: Idea) {
+    const res = await api.put("/ideas/" + id + "/", idea, config);
+    return res.data;
+};
+
+export async function deleteIdea(id: string) {
+    const res = await api.delete("/ideas/" + id + "/", config);
     return res.data;
 };
