@@ -19,7 +19,7 @@ export default function IdeaDetailsScreen() {
     setError(null);
     try {
       if (!id) throw new Error('Missing idea id');
-      await deleteIdea(id);
+      const res = await deleteIdea(id);
       router.push("/IdeasList");
     } catch (err: any) {
       setError(err.message || 'Failed to delete idea');
@@ -57,6 +57,7 @@ export default function IdeaDetailsScreen() {
   return (
     <>
       <View style={{ flex: 1, margin: 20 }}>
+        <Button onPress={() => {router.push({ pathname: '/EditIdea', params: { id: id } })}} style={{alignSelf: 'flex-end'}}>Edit</Button>
         <Text variant="headlineMedium">{idea?.title}</Text>
         <Text variant='labelLarge' style={{ color: 'green', marginBottom: 10 }}>{idea?.status}</Text>
         <Image source={{uri: idea?.main_picture || undefined }} />

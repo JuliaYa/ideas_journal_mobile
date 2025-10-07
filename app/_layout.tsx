@@ -18,6 +18,7 @@ function AppNavigator() {
           <Stack.Screen name="IdeasList" />
           <Stack.Screen name="IdeaDetails" />
           <Stack.Screen name="AddIdea" />
+          <Stack.Screen name="EditIdea" />
           <Stack.Screen name="Settings" />
         </>
       ) : (
