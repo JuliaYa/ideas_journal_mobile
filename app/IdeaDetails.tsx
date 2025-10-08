@@ -1,9 +1,10 @@
 // screens/IdeaDetailsScreen.tsx
 import { useLocalSearchParams, useRouter, useNavigation } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Image, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 import { ActivityIndicator, Button, Snackbar, Text } from 'react-native-paper';
 import { getIdea, deleteIdea, Idea } from './services/ideas';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function IdeaDetailsScreen() {
@@ -48,6 +49,19 @@ export default function IdeaDetailsScreen() {
 
   useEffect(() => {
     navigation.setOptions({ headerShown: true, title: 'Idea Details' });
+    if (!navigation.canGoBack()) {
+
+      navigation.setOptions({
+        headerLeft: () => (
+          <Pressable
+            onPress={() => router.push('/IdeasList')}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
+          </Pressable>
+        )
+      })
+
+    }
     loadList();
   }, [loadList, id, navigation]);
 

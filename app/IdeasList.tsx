@@ -1,10 +1,10 @@
 // screens/IdeasListScreen.tsx
 import { useRouter, useNavigation } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, List, Snackbar, Text } from 'react-native-paper';
 import { getList, Idea } from './services/ideas';
-import { HeaderTitle } from '@react-navigation/elements';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function IdeasListScreen() {
@@ -38,6 +38,17 @@ export default function IdeasListScreen() {
 
   useEffect(() => {
     navigation.setOptions({ headerShown: true, headerTitle: 'List of your Ideas' });
+    if (!navigation.canGoBack()) {
+      navigation.setOptions({
+        headerLeft: () => (
+          <Pressable
+            onPress={() => router.push('/')}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
+          </Pressable>
+        )
+      });
+    }
     loadList();
   }, [loadList, navigation]);
 
@@ -82,5 +93,5 @@ export default function IdeasListScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  addIdea: { margin: 30, marginTop: 10}
+  addIdea: { margin: 30, marginTop: 10 }
 });

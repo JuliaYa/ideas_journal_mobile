@@ -1,9 +1,10 @@
 // screens/AddIdeaScreen.tsx
 import React, { useState, useCallback, useEffect } from 'react';
 import { useRouter, useLocalSearchParams, useNavigation } from 'expo-router';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { ActivityIndicator, Text, TextInput, Button } from 'react-native-paper';
 import { getIdea, editIdea, Idea } from './services/ideas';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function EditIdeaScreen() {
@@ -46,10 +47,21 @@ export default function EditIdeaScreen() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [id]);
 
     useEffect(() => {
         navigation.setOptions({ headerShown: true, title: 'Edit the Idea' });
+        if (!navigation.canGoBack()) {
+            navigation.setOptions({
+                headerLeft: () => (
+                    <Pressable
+                        onPress={() => router.push('/IdeasList')}
+                    >
+                        <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
+                    </Pressable>
+                )
+            });
+        }
         loadIdea();
     }, [loadIdea, id, navigation]);
 

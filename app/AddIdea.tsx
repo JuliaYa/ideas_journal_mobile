@@ -1,7 +1,8 @@
 // screens/AddIdeaScreen.tsx
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import { createIdea } from './services/ideas';
 
@@ -21,6 +22,17 @@ export default function AddIdeaScreen() {
 
   useEffect(() => {
     navigation.setOptions({ headerShown: true, headerTitle: 'Add new Idea' });
+    if (!navigation.canGoBack()) {
+      navigation.setOptions({
+        headerLeft: () => (
+          <Pressable
+            onPress={() => router.push('/IdeasList')}
+          >
+            <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
+          </Pressable>
+        )
+      });
+    }
   }, [navigation]);
 
   return (
