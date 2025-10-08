@@ -1,13 +1,15 @@
 // screens/IdeasListScreen.tsx
-import { useRouter } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, List, Snackbar, Text } from 'react-native-paper';
 import { getList, Idea } from './services/ideas';
+import { HeaderTitle } from '@react-navigation/elements';
 
 
 export default function IdeasListScreen() {
   const router = useRouter();
+  const navigation = useNavigation();
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -35,8 +37,9 @@ export default function IdeasListScreen() {
   }, []);
 
   useEffect(() => {
+    navigation.setOptions({ headerShown: true, headerTitle: 'List of your Ideas' });
     loadList();
-  }, [loadList]);
+  }, [loadList, navigation]);
 
   const renderItem = ({ item }: { item: Idea }) => (
     <List.Item

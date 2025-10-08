@@ -7,6 +7,7 @@ import { Button, Text } from 'react-native-paper';
 
 export default function IndexScreen() {
   const router = useRouter();
+
   return (
     <View style={styles.container}>
       <Text variant="headlineMedium" style={styles.title}>

@@ -1,6 +1,6 @@
 // screens/AddIdeaScreen.tsx
 import React, { useState, useCallback, useEffect } from 'react';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams, useNavigation } from 'expo-router';
 import { View } from 'react-native';
 import { ActivityIndicator, Text, TextInput, Button } from 'react-native-paper';
 import { getIdea, editIdea, Idea } from './services/ideas';
@@ -8,10 +8,11 @@ import { getIdea, editIdea, Idea } from './services/ideas';
 
 export default function EditIdeaScreen() {
     const router = useRouter();
+    const navigation = useNavigation();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [status, setStatus] = useState('');
 
-    //const [idea, setIdea] = useState<Idea>();
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -37,8 +38,8 @@ export default function EditIdeaScreen() {
             console.log(data);
             setTitle(data.title);
             setDescription(data.description || '');
+            //setStatus(data.status || 'new');
 
-            //setIdea(data);
             setLoading(false);
         } catch (err: any) {
             setError(err.message || 'Failed to load idea');
@@ -48,8 +49,9 @@ export default function EditIdeaScreen() {
     }, []);
 
     useEffect(() => {
+        navigation.setOptions({ headerShown: true, title: 'Edit the Idea' });
         loadIdea();
-    }, [loadIdea, id]);
+    }, [loadIdea, id, navigation]);
 
     if (loading) {
         return <ActivityIndicator animating size="large" />
@@ -57,7 +59,6 @@ export default function EditIdeaScreen() {
 
     return (
         <View style={{ flex: 1, margin: 20 }}>
-            <Text variant="headlineMedium" style={{ marginBottom: 20 }}>Edit The Idea</Text>
             <TextInput
                 mode="outlined"
                 placeholder="Type name of your Idea"
