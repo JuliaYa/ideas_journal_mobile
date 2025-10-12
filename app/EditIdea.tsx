@@ -1,11 +1,18 @@
 // screens/AddIdeaScreen.tsx
-import React, { useState, useCallback, useEffect } from 'react';
-import { useRouter, useLocalSearchParams, useNavigation } from 'expo-router';
-import { Pressable, View } from 'react-native';
-import { ActivityIndicator, Text, TextInput, Button } from 'react-native-paper';
-import { getIdea, editIdea, Idea } from './services/ideas';
 import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Pressable, View } from 'react-native';
+import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
+import { Dropdown } from 'react-native-paper-dropdown';
+import { editIdea, getIdea, Idea } from './services/ideas';
 
+export const STATUS_VALUES = [
+    { label: 'New', value: 'new' },
+    { label: 'In Progress', value: 'in_progress' },
+    { label: 'Done', value: 'done' },
+    { label: 'Archived', value: 'archived' },
+];
 
 export default function EditIdeaScreen() {
     const router = useRouter();
@@ -21,7 +28,7 @@ export default function EditIdeaScreen() {
 
     const saveChanges = async function () {
         // just create new Idea object with updated params
-        const res = await editIdea(id, { title, description });
+        const res = await editIdea(id, { title, description, status });
         if (res) {
             router.push('/IdeasList');
         }
@@ -36,10 +43,9 @@ export default function EditIdeaScreen() {
             const res = await getIdea(id);
             const data = (await res) as Idea;
 
-            console.log(data);
             setTitle(data.title);
             setDescription(data.description || '');
-            //setStatus(data.status || 'new');
+            setStatus(data.status || 'new');
 
             setLoading(false);
         } catch (err: any) {
@@ -79,6 +85,13 @@ export default function EditIdeaScreen() {
                 onChangeText={setTitle}
                 style={{ marginBottom: 10, backgroundColor: 'none' }}
             />
+            <Dropdown
+                label="Status"
+                placeholder="Select Status"
+                options={STATUS_VALUES}
+                value={status}
+                onSelect={(value) => setStatus(value || 'new')}
+            />
             <TextInput
                 mode="outlined"
                 multiline={true}
@@ -87,7 +100,7 @@ export default function EditIdeaScreen() {
                 placeholder="Type some more here"
                 value={description}
                 onChangeText={setDescription}
-                style={{ marginBottom: 10, backgroundColor: 'none' }}
+                style={{ marginBottom: 10, marginTop: 10, backgroundColor: 'none' }}
             />
 
             <Button
