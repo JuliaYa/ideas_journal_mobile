@@ -5,6 +5,7 @@ import { FlatList, Pressable, RefreshControl, StyleSheet, View } from 'react-nat
 import { ActivityIndicator, Button, List, Snackbar, Text } from 'react-native-paper';
 import { getList, Idea } from './services/ideas';
 import { Ionicons } from '@expo/vector-icons';
+import { STATUS_COLORS } from './constants';
 
 
 export default function IdeasListScreen() {
@@ -53,12 +54,14 @@ export default function IdeasListScreen() {
   }, [loadList, navigation]);
 
   const renderItem = ({ item }: { item: Idea }) => (
-    <List.Item
-      title={item.title}
-      description={item.description ?? ''}
-      onPress={() => router.push({ pathname: '/IdeaDetails', params: { id: item.id } })}
-      left={props => <List.Icon {...props} icon="spider-web" />}
-    />
+    <View style={[styles.itemRow, { borderLeftColor: STATUS_COLORS[item.status ?? 'new'] ?? STATUS_COLORS['new'] }]}>
+      <List.Item
+        title={item.title}
+        description={item.description ?? ''}
+        onPress={() => router.push({ pathname: '/IdeaDetails', params: { id: item.id } })}
+        style={styles.listItem}
+      />
+    </View>
   );
 
   if (loading) {
@@ -93,5 +96,7 @@ export default function IdeasListScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  addIdea: { margin: 30, marginTop: 10 }
+  addIdea: { margin: 30, marginTop: 10 },
+  itemRow: { borderLeftWidth: 4, marginVertical: 2, marginHorizontal: 8, borderRadius: 4 },
+  listItem: { flex: 1 },
 });

@@ -5,6 +5,7 @@ import { Image, Pressable, View } from 'react-native';
 import { ActivityIndicator, Button, Snackbar, Text } from 'react-native-paper';
 import { getIdea, deleteIdea, Idea } from './services/ideas';
 import { Ionicons } from '@expo/vector-icons';
+import { STATUS_COLORS } from './constants';
 
 
 export default function IdeaDetailsScreen() {
@@ -75,7 +76,7 @@ export default function IdeaDetailsScreen() {
       <View style={{ flex: 1, margin: 20 }}>
         <Button onPress={() => { router.push({ pathname: '/EditIdea', params: { id: id } }) }} style={{ alignSelf: 'flex-end' }}>Edit</Button>
         <Text variant="headlineMedium">{idea?.title}</Text>
-        <Text variant='labelLarge' style={{ color: 'green', marginBottom: 10 }}>{idea?.status}</Text>
+        <Text variant='labelLarge' style={{ color: STATUS_COLORS[idea?.status ?? 'new'] ?? STATUS_COLORS['new'], marginBottom: 10 }}>{idea?.status}</Text>
         <Image source={{ uri: idea?.main_picture || undefined }} />
         <Text variant="bodyLarge" style={{ marginBottom: 20 }}>{idea?.description}</Text>
         <Text variant="bodySmall">Created: {new Date(idea?.created_at || '').toLocaleDateString()}</Text>
