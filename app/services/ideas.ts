@@ -17,8 +17,9 @@ export type Idea = {
   updated_at?: string;
 };
 
-export async function getList() {
-    const res = await api.get("/ideas");
+export async function getList(status?: string) {
+    const params = status ? { status } : undefined;
+    const res = await api.get("/ideas", { params });
     return res.data;
 };
 
