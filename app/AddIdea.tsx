@@ -2,8 +2,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
+import * as ImagePicker from 'expo-image-picker';
 import { createIdea } from './services/ideas';
 
 
@@ -12,9 +13,21 @@ export default function AddIdeaScreen() {
   const navigation = useNavigation();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [imageUri, setImageUri] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      quality: 0.8,
+    });
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
 
   const addIdea = async function () {
-    const res = await createIdea({ title, description });
+    const res = await createIdea({ title, description }, imageUri);
     if (res) {
       router.push('/IdeasList');
     }
@@ -56,6 +69,13 @@ export default function AddIdeaScreen() {
         style={{ marginBottom: 10, backgroundColor: 'none' }}
       />
 
+      <Button mode="outlined" onPress={pickImage} style={styles.imageButton}>
+        {imageUri ? 'Change Image' : 'Add Image'}
+      </Button>
+      {imageUri && (
+        <Image source={{ uri: imageUri }} style={styles.preview} />
+      )}
+
       <Button
         mode="contained"
         disabled={title.trim().length == 0}
@@ -64,3 +84,8 @@ export default function AddIdeaScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  imageButton: { marginBottom: 10 },
+  preview: { width: '100%', height: 200, borderRadius: 8, marginBottom: 10 },
+});

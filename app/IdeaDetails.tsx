@@ -1,7 +1,7 @@
 // screens/IdeaDetailsScreen.tsx
 import { useLocalSearchParams, useRouter, useNavigation } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Image, Pressable, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, Snackbar, Text } from 'react-native-paper';
 import { getIdea, deleteIdea, Idea } from './services/ideas';
 import { Ionicons } from '@expo/vector-icons';
@@ -77,7 +77,9 @@ export default function IdeaDetailsScreen() {
         <Button onPress={() => { router.push({ pathname: '/EditIdea', params: { id: id } }) }} style={{ alignSelf: 'flex-end' }}>Edit</Button>
         <Text variant="headlineMedium">{idea?.title}</Text>
         <Text variant='labelLarge' style={{ color: STATUS_COLORS[idea?.status ?? 'new'] ?? STATUS_COLORS['new'], marginBottom: 10 }}>{idea?.status}</Text>
-        <Image source={{ uri: idea?.main_picture || undefined }} />
+        {idea?.main_picture && (
+          <Image source={{ uri: idea.main_picture }} style={styles.image} />
+        )}
         <Text variant="bodyLarge" style={{ marginBottom: 20 }}>{idea?.description}</Text>
         <Text variant="bodySmall">Created: {new Date(idea?.created_at || '').toLocaleDateString()}</Text>
         <Text variant="bodySmall">Updated: {new Date(idea?.updated_at || '').toLocaleDateString()}</Text>
@@ -89,3 +91,7 @@ export default function IdeaDetailsScreen() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  image: { width: '100%', height: 250, borderRadius: 8, marginBottom: 10 },
+});

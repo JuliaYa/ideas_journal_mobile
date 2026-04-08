@@ -1,10 +1,11 @@
-// screens/AddIdeaScreen.tsx
+// screens/EditIdeaScreen.tsx
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
 import { Dropdown } from 'react-native-paper-dropdown';
+import * as ImagePicker from 'expo-image-picker';
 import { editIdea, getIdea, Idea } from './services/ideas';
 
 export const STATUS_VALUES = [
@@ -20,15 +21,27 @@ export default function EditIdeaScreen() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('');
+    const [imageUri, setImageUri] = useState<string | null>(null);
+    const [existingImage, setExistingImage] = useState<string | null>(null);
 
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const { id } = useLocalSearchParams<{ id: string }>();
 
+    const pickImage = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            quality: 0.8,
+        });
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+        }
+    };
+
     const saveChanges = async function () {
-        // just create new Idea object with updated params
-        const res = await editIdea(id, { title, description, status });
+        const res = await editIdea(id, { title, description, status }, imageUri);
         if (res) {
             router.push('/IdeasList');
         }
@@ -46,6 +59,7 @@ export default function EditIdeaScreen() {
             setTitle(data.title);
             setDescription(data.description || '');
             setStatus(data.status || 'new');
+            setExistingImage(data.main_picture || null);
 
             setLoading(false);
         } catch (err: any) {
@@ -103,6 +117,13 @@ export default function EditIdeaScreen() {
                 style={{ marginBottom: 10, marginTop: 10, backgroundColor: 'none' }}
             />
 
+            <Button mode="outlined" onPress={pickImage} style={styles.imageButton}>
+                {imageUri || existingImage ? 'Change Image' : 'Add Image'}
+            </Button>
+            {(imageUri || existingImage) && (
+                <Image source={{ uri: imageUri || existingImage! }} style={styles.preview} />
+            )}
+
             <Button
                 mode="contained"
                 disabled={title.trim().length == 0}
@@ -111,3 +132,8 @@ export default function EditIdeaScreen() {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    imageButton: { marginBottom: 10 },
+    preview: { width: '100%', height: 200, borderRadius: 8, marginBottom: 10 },
+});
