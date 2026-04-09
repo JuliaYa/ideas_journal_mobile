@@ -3,8 +3,7 @@ import * as React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import AuthProvider from './context/AuthContext';
 import IdeasAppTheme from './customTheme';
-import useAuth from "./hooks/useAuth";
-
+import useAuth from './hooks/useAuth';
 
 function AppNavigator() {
   const { user, loading } = useAuth();
@@ -29,7 +28,6 @@ function AppNavigator() {
 }
 
 export default function RootLayout() {
-
   return (
     <PaperProvider theme={IdeasAppTheme}>
       <AuthProvider>

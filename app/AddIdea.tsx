@@ -1,12 +1,11 @@
 // screens/AddIdeaScreen.tsx
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { createIdea } from './services/ideas';
-
 
 export default function AddIdeaScreen() {
   const router = useRouter();
@@ -38,12 +37,10 @@ export default function AddIdeaScreen() {
     if (!navigation.canGoBack()) {
       navigation.setOptions({
         headerLeft: () => (
-          <Pressable
-            onPress={() => router.push('/IdeasList')}
-          >
+          <Pressable onPress={() => router.push('/IdeasList')}>
             <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
           </Pressable>
-        )
+        ),
       });
     }
   }, [navigation]);
@@ -72,15 +69,11 @@ export default function AddIdeaScreen() {
       <Button mode="outlined" onPress={pickImage} style={styles.imageButton}>
         {imageUri ? 'Change Image' : 'Add Image'}
       </Button>
-      {imageUri && (
-        <Image source={{ uri: imageUri }} style={styles.preview} />
-      )}
+      {imageUri && <Image source={{ uri: imageUri }} style={styles.preview} />}
 
-      <Button
-        mode="contained"
-        disabled={title.trim().length == 0}
-        onPress={addIdea}>
-        Add</Button>
+      <Button mode="contained" disabled={title.trim().length == 0} onPress={addIdea}>
+        Add
+      </Button>
     </View>
   );
 }

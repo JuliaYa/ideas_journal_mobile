@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { Alert, Button, TextInput, View } from "react-native";
-import useAuth from "./hooks/useAuth";
+import React, { useState } from 'react';
+import { Alert, Button, TextInput, View } from 'react-native';
+import useAuth from './hooks/useAuth';
 
 export default function LoginScreen() {
   const { login } = useAuth();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   async function handleLogin() {
     try {
       await login(username, password);
     } catch (e) {
-      Alert.alert("Error", "Incorrrect login or password");
+      Alert.alert('Error', 'Incorrrect login or password');
     }
   }
 

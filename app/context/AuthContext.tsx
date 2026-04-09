@@ -1,7 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
-import React, { createContext, useEffect, useState } from "react";
-import { login as apiLogin, logout as apiLogout } from "../services/auth";
+import React, { createContext, useEffect, useState } from 'react';
+import { login as apiLogin, logout as apiLogout } from '../services/auth';
 
 interface AuthContextProps {
   user: boolean;
@@ -24,10 +24,10 @@ export default ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     (async () => {
-      const token = await AsyncStorage.getItem("access");
+      const token = await AsyncStorage.getItem('access');
       if (token) {
-        setUser(true);  // set real user
-      }else{
+        setUser(true); // set real user
+      } else {
         router.push('/Login');
       }
       setLoading(false);
@@ -45,9 +45,5 @@ export default ({ children }: { children: React.ReactNode }) => {
     setUser(false);
   }
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, login, logout, loading }}>{children}</AuthContext.Provider>;
 };

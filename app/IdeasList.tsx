@@ -7,7 +7,6 @@ import { getList, Idea } from './services/ideas';
 import { Ionicons } from '@expo/vector-icons';
 import { STATUS_COLORS } from './constants';
 
-
 export default function IdeasListScreen() {
   const router = useRouter();
   const navigation = useNavigation();
@@ -17,38 +16,39 @@ export default function IdeasListScreen() {
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
-  const loadList = useCallback(async (opts: { refresh?: boolean } = {}) => {
-    if (opts.refresh) {
-      setRefreshing(true);
-    } else {
-      setLoading(true);
-    }
-    setError(null);
-    try {
-      const res = await getList(statusFilter ?? undefined);
-      const data = (await res) as Idea[];
+  const loadList = useCallback(
+    async (opts: { refresh?: boolean } = {}) => {
+      if (opts.refresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+      setError(null);
+      try {
+        const res = await getList(statusFilter ?? undefined);
+        const data = (await res) as Idea[];
 
-      setIdeas(Array.isArray(data) ? data : []);
-      setLoading(false);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load ideas');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [statusFilter]);
+        setIdeas(Array.isArray(data) ? data : []);
+        setLoading(false);
+      } catch (err: any) {
+        setError(err.message || 'Failed to load ideas');
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [statusFilter],
+  );
 
   useEffect(() => {
     navigation.setOptions({ headerShown: true, headerTitle: 'List of your Ideas' });
     if (!navigation.canGoBack()) {
       navigation.setOptions({
         headerLeft: () => (
-          <Pressable
-            onPress={() => router.push('/')}
-          >
+          <Pressable onPress={() => router.push('/')}>
             <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
           </Pressable>
-        )
+        ),
       });
     }
     loadList();
@@ -66,7 +66,7 @@ export default function IdeasListScreen() {
   );
 
   if (loading) {
-    return <ActivityIndicator animating size="large" />
+    return <ActivityIndicator animating size="large" />;
   }
 
   const STATUS_FILTERS = ['all', ...Object.keys(STATUS_COLORS)] as const;
@@ -100,13 +100,17 @@ export default function IdeasListScreen() {
       ) : (
         <FlatList
           data={ideas}
-          keyExtractor={item => item.id ?? String(Math.random())}
+          keyExtractor={(item) => item.id ?? String(Math.random())}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadList({ refresh: true })} />}
           contentContainerStyle={ideas.length === 0 ? styles.center : undefined}
         />
       )}
-      <Snackbar visible={!!error} onDismiss={() => setError(null)} action={{ label: 'Retry', onPress: () => loadList() }}>
+      <Snackbar
+        visible={!!error}
+        onDismiss={() => setError(null)}
+        action={{ label: 'Retry', onPress: () => loadList() }}
+      >
         {error}
       </Snackbar>
     </>

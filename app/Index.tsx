@@ -4,7 +4,6 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 
-
 export default function IndexScreen() {
   const router = useRouter();
 
@@ -15,27 +14,15 @@ export default function IndexScreen() {
       </Text>
 
       <View style={styles.buttons}>
-        <Button
-          mode="contained"
-          icon="format-list-text"
-          onPress={() => router.push('/IdeasList')}
-        >
+        <Button mode="contained" icon="format-list-text" onPress={() => router.push('/IdeasList')}>
           Dive into Ideas
         </Button>
-        <Button
-          mode="contained"
-          icon="grease-pencil"
-          onPress={() => router.push('/AddIdea')}
-        >
+        <Button mode="contained" icon="grease-pencil" onPress={() => router.push('/AddIdea')}>
           I have Idea
         </Button>
       </View>
 
-      <Button
-        mode="text"
-        onPress={() => router.push('/Settings')}
-        style={styles.settingsButton}
-      >
+      <Button mode="text" onPress={() => router.push('/Settings')} style={styles.settingsButton}>
         Go to Settings
       </Button>
     </View>

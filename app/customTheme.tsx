@@ -5,11 +5,11 @@ const IdeasAppTheme: MD3Theme = {
   colors: {
     ...DefaultTheme.colors,
     // important keys that Paper components read
-    primary: '#7c56a7',        // main brand color
+    primary: '#7c56a7', // main brand color
     onPrimary: '#ffffff',
-    background: '#c6bbd3ff',     // page background if you want purple
+    background: '#c6bbd3ff', // page background if you want purple
     onBackground: '#ffffff',
-    surface: '#ffffff',        // cards, sheets
+    surface: '#ffffff', // cards, sheets
     onSurface: '#261d15ff',
     // optional: other useful tokens
     secondary: '#c68cf0',

@@ -1,12 +1,12 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const API_URL = "http://192.168.1.176:8000/api/"  // for mobile testing
+const API_URL = 'http://192.168.1.176:8000/api/'; // for mobile testing
 
 const api = axios.create({ baseURL: API_URL });
 
 api.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem("access");
+  const token = await AsyncStorage.getItem('access');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -17,20 +17,20 @@ api.interceptors.response.use(
   (res) => res,
   async (error) => {
     if (error.response?.status === 401) {
-      const refresh = await AsyncStorage.getItem("refresh");
+      const refresh = await AsyncStorage.getItem('refresh');
       if (refresh) {
         try {
           const res = await axios.post(`${API_URL}token/refresh/`, { refresh });
-          await AsyncStorage.setItem("access", res.data.access);
+          await AsyncStorage.setItem('access', res.data.access);
           error.config.headers.Authorization = `Bearer ${res.data.access}`;
           return api.request(error.config);
         } catch (e) {
-          await AsyncStorage.multiRemove(["access", "refresh"]);
+          await AsyncStorage.multiRemove(['access', 'refresh']);
         }
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

@@ -7,7 +7,6 @@ import { getIdea, deleteIdea, Idea } from './services/ideas';
 import { Ionicons } from '@expo/vector-icons';
 import { STATUS_COLORS } from './constants';
 
-
 export default function IdeaDetailsScreen() {
   const router = useRouter();
   const navigation = useNavigation();
@@ -23,7 +22,7 @@ export default function IdeaDetailsScreen() {
     try {
       if (!id) throw new Error('Missing idea id');
       const res = await deleteIdea(id);
-      router.push("/IdeasList");
+      router.push('/IdeasList');
     } catch (err: any) {
       setError(err.message || 'Failed to delete idea');
     } finally {
@@ -51,41 +50,54 @@ export default function IdeaDetailsScreen() {
   useEffect(() => {
     navigation.setOptions({ headerShown: true, title: 'Idea Details' });
     if (!navigation.canGoBack()) {
-
       navigation.setOptions({
         headerLeft: () => (
-          <Pressable
-            onPress={() => router.push('/IdeasList')}
-          >
+          <Pressable onPress={() => router.push('/IdeasList')}>
             <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
           </Pressable>
-        )
-      })
-
+        ),
+      });
     }
     loadList();
   }, [loadList, id, navigation]);
 
-
   if (loading) {
-    return <ActivityIndicator animating size="large" />
+    return <ActivityIndicator animating size="large" />;
   }
 
   return (
     <>
       <View style={{ flex: 1, margin: 20 }}>
-        <Button onPress={() => { router.push({ pathname: '/EditIdea', params: { id: id } }) }} style={{ alignSelf: 'flex-end' }}>Edit</Button>
+        <Button
+          onPress={() => {
+            router.push({ pathname: '/EditIdea', params: { id: id } });
+          }}
+          style={{ alignSelf: 'flex-end' }}
+        >
+          Edit
+        </Button>
         <Text variant="headlineMedium">{idea?.title}</Text>
-        <Text variant='labelLarge' style={{ color: STATUS_COLORS[idea?.status ?? 'new'] ?? STATUS_COLORS['new'], marginBottom: 10 }}>{idea?.status}</Text>
-        {idea?.main_picture && (
-          <Image source={{ uri: idea.main_picture }} style={styles.image} />
-        )}
-        <Text variant="bodyLarge" style={{ marginBottom: 20 }}>{idea?.description}</Text>
+        <Text
+          variant="labelLarge"
+          style={{ color: STATUS_COLORS[idea?.status ?? 'new'] ?? STATUS_COLORS['new'], marginBottom: 10 }}
+        >
+          {idea?.status}
+        </Text>
+        {idea?.main_picture && <Image source={{ uri: idea.main_picture }} style={styles.image} />}
+        <Text variant="bodyLarge" style={{ marginBottom: 20 }}>
+          {idea?.description}
+        </Text>
         <Text variant="bodySmall">Created: {new Date(idea?.created_at || '').toLocaleDateString()}</Text>
         <Text variant="bodySmall">Updated: {new Date(idea?.updated_at || '').toLocaleDateString()}</Text>
-        <Button onPress={deleteItem} style={{ alignSelf: 'flex-end' }}>Delete</Button>
+        <Button onPress={deleteItem} style={{ alignSelf: 'flex-end' }}>
+          Delete
+        </Button>
       </View>
-      <Snackbar visible={!!error} onDismiss={() => setError(null)} action={{ label: 'Retry', onPress: () => loadList() }}>
+      <Snackbar
+        visible={!!error}
+        onDismiss={() => setError(null)}
+        action={{ label: 'Retry', onPress: () => loadList() }}
+      >
         {error}
       </Snackbar>
     </>
