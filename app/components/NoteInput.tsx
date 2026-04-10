@@ -3,6 +3,7 @@ import { Image, StyleSheet, View } from 'react-native';
 import { IconButton, TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import { Audio } from 'expo-av';
+import { colors, radii, spacing } from '../design';
 
 type Props = {
   onSendText: (text: string, imageUris: string[]) => Promise<void>;
@@ -76,13 +77,19 @@ export default function NoteInput({ onSendText, onSendAudio }: Props) {
     return (
       <View style={styles.container}>
         <View style={styles.audioBar}>
-          <IconButton icon="close" onPress={discardRecording} disabled={sending} />
+          <IconButton icon="close" onPress={discardRecording} disabled={sending} iconColor={colors.warmCharcoal} />
           {recording ? (
-            <IconButton icon="stop-circle" iconColor="#e53935" size={36} onPress={stopAndSend} disabled={sending} />
+            <IconButton
+              icon="stop-circle"
+              iconColor={colors.pomegranate400}
+              size={36}
+              onPress={stopAndSend}
+              disabled={sending}
+            />
           ) : (
-            <IconButton icon="record-circle" iconColor="#e53935" size={36} onPress={startRecording} />
+            <IconButton icon="record-circle" iconColor={colors.pomegranate400} size={36} onPress={startRecording} />
           )}
-          {recording && <IconButton icon="send" onPress={stopAndSend} disabled={sending} />}
+          {recording && <IconButton icon="send" onPress={stopAndSend} disabled={sending} iconColor={colors.ube800} />}
         </View>
       </View>
     );
@@ -95,26 +102,40 @@ export default function NoteInput({ onSendText, onSendAudio }: Props) {
           {imageUris.map((uri, i) => (
             <View key={i} style={styles.previewWrap}>
               <Image source={{ uri }} style={styles.previewImage} />
-              <IconButton icon="close-circle" size={16} style={styles.removeBtn} onPress={() => removeImage(i)} />
+              <IconButton
+                icon="close-circle"
+                size={16}
+                style={styles.removeBtn}
+                onPress={() => removeImage(i)}
+                iconColor={colors.warmCharcoal}
+              />
             </View>
           ))}
         </View>
       )}
       <View style={styles.inputRow}>
-        <IconButton icon="image-plus" onPress={pickImage} disabled={sending} />
+        <IconButton icon="image-plus" onPress={pickImage} disabled={sending} iconColor={colors.warmCharcoal} />
         <TextInput
           mode="outlined"
           placeholder="Add a note..."
           value={text}
           onChangeText={setText}
           style={styles.textInput}
+          outlineColor={colors.oatBorder}
+          activeOutlineColor={colors.ube800}
           dense
         />
-        <IconButton icon="microphone" onPress={() => setMode('audio')} disabled={sending} />
+        <IconButton
+          icon="microphone"
+          onPress={() => setMode('audio')}
+          disabled={sending}
+          iconColor={colors.warmCharcoal}
+        />
         <IconButton
           icon="send"
           onPress={handleSendText}
           disabled={sending || (!text.trim() && imageUris.length === 0)}
+          iconColor={colors.ube800}
         />
       </View>
     </View>
@@ -124,10 +145,10 @@ export default function NoteInput({ onSendText, onSendAudio }: Props) {
 const styles = StyleSheet.create({
   container: {
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    backgroundColor: '#fff',
-    paddingHorizontal: 4,
-    paddingVertical: 4,
+    borderTopColor: colors.oatBorder,
+    backgroundColor: colors.white,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: spacing.xs,
   },
   inputRow: {
     flexDirection: 'row',
@@ -135,20 +156,20 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: colors.warmCream,
   },
   previewRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
-    paddingHorizontal: 8,
+    paddingHorizontal: spacing.sm,
     paddingTop: 6,
   },
   previewWrap: { position: 'relative' },
   previewImage: {
     width: 56,
     height: 56,
-    borderRadius: 6,
+    borderRadius: radii.standard,
   },
   removeBtn: {
     position: 'absolute',

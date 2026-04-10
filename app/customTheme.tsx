@@ -1,20 +1,29 @@
 import { MD3LightTheme as DefaultTheme, type MD3Theme } from 'react-native-paper';
+import { colors } from './design';
 
 const IdeasAppTheme: MD3Theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    // important keys that Paper components read
-    primary: '#7c56a7', // main brand color
-    onPrimary: '#ffffff',
-    background: '#c6bbd3ff', // page background if you want purple
-    onBackground: '#ffffff',
-    surface: '#ffffff', // cards, sheets
-    onSurface: '#261d15ff',
-    // optional: other useful tokens
-    secondary: '#c68cf0',
-    outline: '#e0d8ee',
-    // keep other default tokens
+    primary: colors.ube800,
+    onPrimary: colors.white,
+    background: colors.warmCream,
+    onBackground: colors.black,
+    surface: colors.white,
+    onSurface: colors.black,
+    surfaceVariant: colors.oatLight,
+    onSurfaceVariant: colors.warmCharcoal,
+    secondary: colors.matcha600,
+    onSecondary: colors.white,
+    tertiary: colors.slushie500,
+    outline: colors.oatBorder,
+    outlineVariant: colors.oatLight,
+    elevation: {
+      ...DefaultTheme.colors.elevation,
+      level0: colors.warmCream,
+      level1: colors.white,
+      level2: colors.white,
+    },
   },
 };
 export default IdeasAppTheme;

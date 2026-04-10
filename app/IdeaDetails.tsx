@@ -5,7 +5,7 @@ import { ActivityIndicator, Button, Snackbar, Text } from 'react-native-paper';
 import { getIdea, deleteIdea, Idea } from './services/ideas';
 import { getNotes, createTextNote, createAudioNote, deleteNote, NoteEntry } from './services/notes';
 import { Ionicons } from '@expo/vector-icons';
-import { STATUS_COLORS } from './constants';
+import { colors, radii, shadows, spacing, STATUS_COLORS } from './design';
 import NoteTimeline from './components/NoteTimeline';
 import NoteInput from './components/NoteInput';
 
@@ -69,16 +69,21 @@ export default function IdeaDetailsScreen() {
   };
 
   const handleEditNote = (_note: NoteEntry) => {
-    // TODO: inline editing — for now this is a no-op placeholder
+    // TODO: inline editing
   };
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: true, title: 'Idea Details' });
+    navigation.setOptions({
+      headerShown: true,
+      title: 'Idea Details',
+      headerStyle: { backgroundColor: colors.warmCream },
+      headerShadowVisible: false,
+    });
     if (!navigation.canGoBack()) {
       navigation.setOptions({
         headerLeft: () => (
           <Pressable onPress={() => router.push('/IdeasList')}>
-            <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
+            <Ionicons name="arrow-back" size={24} color={colors.black} style={{ marginLeft: 15, marginRight: 15 }} />
           </Pressable>
         ),
       });
@@ -87,40 +92,61 @@ export default function IdeaDetailsScreen() {
   }, [loadData, navigation]);
 
   if (loading) {
-    return <ActivityIndicator animating size="large" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
   }
+
+  const statusColor = STATUS_COLORS[idea?.status ?? 'new'] ?? STATUS_COLORS['new'];
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: colors.warmCream }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       keyboardVerticalOffset={90}
     >
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
-        <Button
-          onPress={() => router.push({ pathname: '/EditIdea', params: { id } })}
-          style={{ alignSelf: 'flex-end' }}
-        >
-          Edit
-        </Button>
-        <Text variant="headlineMedium">{idea?.title}</Text>
-        <Text
-          variant="labelLarge"
-          style={{ color: STATUS_COLORS[idea?.status ?? 'new'] ?? STATUS_COLORS['new'], marginBottom: 10 }}
-        >
-          {idea?.status}
-        </Text>
-        {idea?.main_picture && <Image source={{ uri: idea.main_picture }} style={styles.image} />}
-        <Text variant="bodyLarge" style={{ marginBottom: 20 }}>
-          {idea?.description}
-        </Text>
-        <Text variant="bodySmall">Created: {new Date(idea?.created_at || '').toLocaleDateString()}</Text>
-        <Text variant="bodySmall" style={{ marginBottom: 20 }}>
-          Updated: {new Date(idea?.updated_at || '').toLocaleDateString()}
-        </Text>
-        <Button onPress={deleteItem} style={{ alignSelf: 'flex-end' }}>
-          Delete
-        </Button>
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <View style={[styles.statusBadge, { backgroundColor: statusColor }]}>
+              <Text style={styles.statusText}>{idea?.status?.replace('_', ' ')}</Text>
+            </View>
+            <View style={styles.headerActions}>
+              <Button
+                mode="outlined"
+                onPress={() => router.push({ pathname: '/EditIdea', params: { id } })}
+                style={styles.editButton}
+                labelStyle={styles.editButtonLabel}
+              >
+                Edit
+              </Button>
+              <Button mode="text" onPress={deleteItem} textColor={colors.pomegranate400} compact>
+                Delete
+              </Button>
+            </View>
+          </View>
+
+          <Text variant="headlineMedium" style={styles.title}>
+            {idea?.title}
+          </Text>
+
+          {idea?.main_picture && <Image source={{ uri: idea.main_picture }} style={styles.image} />}
+
+          <Text variant="bodyLarge" style={styles.description}>
+            {idea?.description}
+          </Text>
+
+          <View style={styles.metaRow}>
+            <Text variant="bodySmall" style={styles.metaText}>
+              Created: {new Date(idea?.created_at || '').toLocaleDateString()}
+            </Text>
+            <Text variant="bodySmall" style={styles.metaText}>
+              Updated: {new Date(idea?.updated_at || '').toLocaleDateString()}
+            </Text>
+          </View>
+        </View>
 
         <Text variant="titleMedium" style={styles.notesTitle}>
           Notes
@@ -139,7 +165,82 @@ export default function IdeaDetailsScreen() {
 
 const styles = StyleSheet.create({
   scroll: { flex: 1 },
-  scrollContent: { padding: 20 },
-  image: { width: '100%', height: 250, borderRadius: 8, marginBottom: 10 },
-  notesTitle: { marginTop: 16, marginBottom: 8 },
+  scrollContent: { padding: spacing.md },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: colors.warmCream,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    backgroundColor: colors.white,
+    borderRadius: radii.feature,
+    borderWidth: 1,
+    borderColor: colors.oatBorder,
+    padding: spacing.lg,
+    ...shadows.clay,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.md,
+  },
+  statusBadge: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: radii.badge,
+  },
+  statusText: {
+    color: colors.white,
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  editButton: {
+    borderColor: colors.oatBorder,
+    borderRadius: radii.standard,
+  },
+  editButtonLabel: {
+    fontSize: 14,
+    color: colors.black,
+  },
+  title: {
+    color: colors.black,
+    fontWeight: '600',
+    marginBottom: spacing.md,
+  },
+  image: {
+    width: '100%',
+    height: 250,
+    borderRadius: radii.feature,
+    marginBottom: spacing.md,
+  },
+  description: {
+    color: colors.warmCharcoal,
+    marginBottom: spacing.md,
+    lineHeight: 26,
+  },
+  metaRow: {
+    borderTopWidth: 1,
+    borderTopColor: colors.oatLight,
+    paddingTop: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  metaText: {
+    color: colors.warmSilver,
+    marginBottom: 2,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  notesTitle: {
+    color: colors.black,
+    fontWeight: '600',
+    marginTop: spacing.lg,
+    marginBottom: spacing.sm,
+  },
 });

@@ -3,6 +3,7 @@ import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import { Audio } from 'expo-av';
 import { NoteEntry } from '../services/notes';
+import { colors, radii, shadows, spacing } from '../design';
 
 type Props = {
   notes: NoteEntry[];
@@ -52,8 +53,10 @@ function AudioPlayer({ uri }: { uri: string }) {
 
   return (
     <Pressable onPress={togglePlay} style={styles.audioRow}>
-      <IconButton icon={playing ? 'pause-circle' : 'play-circle'} size={32} />
-      <Text variant="bodyMedium">Audio note</Text>
+      <IconButton icon={playing ? 'pause-circle' : 'play-circle'} size={32} iconColor={colors.ube800} />
+      <Text variant="bodyMedium" style={{ color: colors.warmCharcoal }}>
+        Audio note
+      </Text>
     </Pressable>
   );
 }
@@ -73,8 +76,10 @@ function NoteItem({ note, onDelete, onEdit }: { note: NoteEntry; onDelete: () =>
           {formatTimestamp(note.created_at)}
         </Text>
         <View style={styles.actions}>
-          {note.note_type === 'text' && <IconButton icon="pencil" size={16} onPress={onEdit} />}
-          <IconButton icon="delete" size={16} onPress={confirmDelete} />
+          {note.note_type === 'text' && (
+            <IconButton icon="pencil" size={16} onPress={onEdit} iconColor={colors.warmSilver} />
+          )}
+          <IconButton icon="delete" size={16} onPress={confirmDelete} iconColor={colors.warmSilver} />
         </View>
       </View>
 
@@ -120,37 +125,43 @@ export default function NoteTimeline({ notes, onDelete, onEdit }: Props) {
 
 const styles = StyleSheet.create({
   noteCard: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 8,
+    backgroundColor: colors.white,
+    borderRadius: radii.card,
+    borderWidth: 1,
+    borderColor: colors.oatBorder,
+    padding: spacing.md,
+    marginBottom: spacing.sm,
+    ...shadows.clay,
   },
   noteHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  timestamp: { color: '#888' },
+  timestamp: { color: colors.warmSilver },
   actions: { flexDirection: 'row' },
-  noteText: { marginTop: 4 },
+  noteText: {
+    marginTop: spacing.xs,
+    color: colors.black,
+  },
   imageRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
-    marginTop: 8,
+    marginTop: spacing.sm,
   },
   thumbnail: {
     width: 80,
     height: 80,
-    borderRadius: 6,
+    borderRadius: radii.standard,
   },
   audioRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   empty: {
-    color: '#aaa',
+    color: colors.warmSilver,
     textAlign: 'center',
-    marginVertical: 20,
+    marginVertical: spacing.lg,
   },
 });

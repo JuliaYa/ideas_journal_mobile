@@ -1,12 +1,12 @@
-// screens/EditIdeaScreen.tsx
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, TextInput } from 'react-native-paper';
 import { Dropdown } from 'react-native-paper-dropdown';
 import * as ImagePicker from 'expo-image-picker';
 import { editIdea, getIdea, Idea } from './services/ideas';
+import { colors, radii, shadows, spacing } from './design';
 
 export const STATUS_VALUES = [
   { label: 'New', value: 'new' },
@@ -25,7 +25,6 @@ export default function EditIdeaScreen() {
   const [existingImage, setExistingImage] = useState<string | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   const { id } = useLocalSearchParams<{ id: string }>();
 
@@ -49,33 +48,33 @@ export default function EditIdeaScreen() {
 
   const loadIdea = useCallback(async () => {
     setLoading(true);
-    setError(null);
-
     try {
       if (!id) throw new Error('Missing idea id');
       const res = await getIdea(id);
       const data = (await res) as Idea;
-
       setTitle(data.title);
       setDescription(data.description || '');
       setStatus(data.status || 'new');
       setExistingImage(data.main_picture || null);
-
-      setLoading(false);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load idea');
+    } catch (_err) {
+      // handled by loading state
     } finally {
       setLoading(false);
     }
   }, [id]);
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: true, title: 'Edit the Idea' });
+    navigation.setOptions({
+      headerShown: true,
+      title: 'Edit Idea',
+      headerStyle: { backgroundColor: colors.warmCream },
+      headerShadowVisible: false,
+    });
     if (!navigation.canGoBack()) {
       navigation.setOptions({
         headerLeft: () => (
           <Pressable onPress={() => router.push('/IdeasList')}>
-            <Ionicons name="arrow-back" size={24} color="black" style={{ marginLeft: 15, marginRight: 15 }} />
+            <Ionicons name="arrow-back" size={24} color={colors.black} style={{ marginLeft: 15, marginRight: 15 }} />
           </Pressable>
         ),
       });
@@ -84,50 +83,118 @@ export default function EditIdeaScreen() {
   }, [loadIdea, id, navigation]);
 
   if (loading) {
-    return <ActivityIndicator animating size="large" />;
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating size="large" />
+      </View>
+    );
   }
 
   return (
-    <View style={{ flex: 1, margin: 20 }}>
-      <TextInput
-        mode="outlined"
-        placeholder="Type name of your Idea"
-        label="Title"
-        value={title}
-        onChangeText={setTitle}
-        style={{ marginBottom: 10, backgroundColor: 'none' }}
-      />
-      <Dropdown
-        label="Status"
-        placeholder="Select Status"
-        options={STATUS_VALUES}
-        value={status}
-        onSelect={(value) => setStatus(value || 'new')}
-      />
-      <TextInput
-        mode="outlined"
-        multiline={true}
-        numberOfLines={5}
-        label="Description"
-        placeholder="Type some more here"
-        value={description}
-        onChangeText={setDescription}
-        style={{ marginBottom: 10, marginTop: 10, backgroundColor: 'none' }}
-      />
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <View style={styles.card}>
+        <TextInput
+          mode="outlined"
+          placeholder="Type name of your Idea"
+          label="Title"
+          value={title}
+          onChangeText={setTitle}
+          style={styles.input}
+          outlineColor={colors.oatBorder}
+          activeOutlineColor={colors.ube800}
+        />
+        <Dropdown
+          label="Status"
+          placeholder="Select Status"
+          options={STATUS_VALUES}
+          value={status}
+          onSelect={(value) => setStatus(value || 'new')}
+        />
+        <TextInput
+          mode="outlined"
+          multiline={true}
+          numberOfLines={5}
+          label="Description"
+          placeholder="Type some more here"
+          value={description}
+          onChangeText={setDescription}
+          style={[styles.input, { marginTop: spacing.md }]}
+          outlineColor={colors.oatBorder}
+          activeOutlineColor={colors.ube800}
+        />
 
-      <Button mode="outlined" onPress={pickImage} style={styles.imageButton}>
-        {imageUri || existingImage ? 'Change Image' : 'Add Image'}
-      </Button>
-      {(imageUri || existingImage) && <Image source={{ uri: imageUri || existingImage! }} style={styles.preview} />}
+        <Button
+          mode="outlined"
+          onPress={pickImage}
+          style={styles.imageButton}
+          labelStyle={{ color: colors.black }}
+          icon="image-plus"
+        >
+          {imageUri || existingImage ? 'Change Image' : 'Add Image'}
+        </Button>
+        {(imageUri || existingImage) && <Image source={{ uri: imageUri || existingImage! }} style={styles.preview} />}
 
-      <Button mode="contained" disabled={title.trim().length == 0} onPress={saveChanges}>
-        Save
-      </Button>
-    </View>
+        <Button
+          mode="contained"
+          disabled={title.trim().length === 0}
+          onPress={saveChanges}
+          style={styles.submitButton}
+          contentStyle={styles.submitContent}
+          labelStyle={styles.submitLabel}
+        >
+          Save
+        </Button>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  imageButton: { marginBottom: 10 },
-  preview: { width: '100%', height: 200, borderRadius: 8, marginBottom: 10 },
+  container: {
+    flex: 1,
+    backgroundColor: colors.warmCream,
+  },
+  content: {
+    padding: spacing.md,
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: colors.warmCream,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    backgroundColor: colors.white,
+    borderRadius: radii.feature,
+    borderWidth: 1,
+    borderColor: colors.oatBorder,
+    padding: spacing.lg,
+    ...shadows.clay,
+  },
+  input: {
+    marginBottom: spacing.md,
+    backgroundColor: colors.warmCream,
+  },
+  imageButton: {
+    marginBottom: spacing.md,
+    borderColor: colors.oatBorder,
+    borderRadius: radii.standard,
+    borderStyle: 'dashed' as any,
+  },
+  preview: {
+    width: '100%',
+    height: 200,
+    borderRadius: radii.feature,
+    marginBottom: spacing.md,
+  },
+  submitButton: {
+    borderRadius: radii.pill,
+  },
+  submitContent: {
+    paddingVertical: spacing.xs,
+  },
+  submitLabel: {
+    fontWeight: '500',
+    fontSize: 16,
+  },
 });
