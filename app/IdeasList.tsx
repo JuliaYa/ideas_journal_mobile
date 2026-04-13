@@ -16,11 +16,11 @@ export default function IdeasListScreen() {
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
   const loadList = useCallback(
-    async (opts: { refresh?: boolean } = {}) => {
-      if (opts.refresh) {
-        setRefreshing(true);
-      } else {
+    async (opts: { refresh?: boolean; initial?: boolean } = {}) => {
+      if (opts.initial) {
         setLoading(true);
+      } else if (opts.refresh) {
+        setRefreshing(true);
       }
       setError(null);
       try {
@@ -36,6 +36,8 @@ export default function IdeasListScreen() {
     },
     [statusFilter],
   );
+
+  const initialLoadDone = React.useRef(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -53,8 +55,12 @@ export default function IdeasListScreen() {
         ),
       });
     }
-    loadList();
-  }, [loadList, navigation]);
+  }, [navigation, router]);
+
+  useEffect(() => {
+    loadList({ initial: !initialLoadDone.current });
+    initialLoadDone.current = true;
+  }, [loadList]);
 
   const renderItem = ({ item }: { item: Idea }) => {
     const statusColor = STATUS_COLORS[item.status ?? 'new'] ?? STATUS_COLORS['new'];
